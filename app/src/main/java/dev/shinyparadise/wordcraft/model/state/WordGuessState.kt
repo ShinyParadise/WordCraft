@@ -6,7 +6,8 @@ data class WordGuessState(
     override val usedHints: Int,
     override val maxAttempts: Int,
     override val currentAttempt: Int,
-    val guesses: List<String>
+    val guesses: List<String>,
+    val revealedIndexes: Set<Int> = emptySet()
 ) : LevelState, AttemptBasedState {
 
     companion object {
@@ -17,7 +18,8 @@ data class WordGuessState(
                 usedHints = 0,
                 maxAttempts = maxAttempts,
                 currentAttempt = 0,
-                guesses = emptyList()
+                guesses = emptyList(),
+                revealedIndexes = emptySet()
             )
         }
     }

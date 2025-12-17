@@ -44,6 +44,12 @@ fun WordleGame(
         )
 
         Button(
+            onClick = { onAction(GameAction.UseRevealLetter) }
+        ) {
+            Text("Подсказка буквы")
+        }
+
+        Button(
             enabled = input.length == level.targetWord.length,
             onClick = {
                 onAction(GameAction.SubmitWord(input))

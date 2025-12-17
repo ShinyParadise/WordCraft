@@ -33,22 +33,29 @@ fun WordCraftNavHost() {
 
         composable("game/{levelId}") { backStack ->
             val levelId = backStack.arguments?.getString("levelId")!!.toInt()
+
             GameScreen(
                 levelId = levelId,
-                onFinish = {
-                    navController.navigate("result/$levelId")
+                onFinish = { result ->
+                    navController.navigate(
+                        "result/${result.levelId}/${result.result.name}"
+                    )
                 }
             )
         }
 
-        composable("result/{levelId}") { backStack ->
+        composable("result/{levelId}/{result}") { backStack ->
             val levelId = backStack.arguments?.getString("levelId")!!.toInt()
+            val result = backStack.arguments?.getString("result")!!
+
             ResultScreen(
                 levelId = levelId,
+                isWin = result == "WIN",
                 onBackToMap = {
                     navController.popBackStack("map", false)
                 }
             )
         }
+
     }
 }
