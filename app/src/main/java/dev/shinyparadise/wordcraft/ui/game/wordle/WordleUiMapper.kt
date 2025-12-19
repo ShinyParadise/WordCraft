@@ -25,7 +25,7 @@ object WordleUiMapper {
         }
 
         // Строка с подсказками
-        if (rows.size < level.maxAttempts) {
+        if (rows.size < state.maxAttempts) {
             val hintLetters = level.targetWord.mapIndexed { index, char ->
                 if (index in state.revealedIndexes) char else ' '
             }
@@ -36,7 +36,7 @@ object WordleUiMapper {
             )
         }
 
-        val emptyRows = level.maxAttempts - rows.size
+        val emptyRows = state.maxAttempts - rows.size
         repeat(emptyRows) {
             rows += GuessRowUi(
                 letters = List(level.targetWord.length) { ' ' },

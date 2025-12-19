@@ -5,67 +5,98 @@ import dev.shinyparadise.wordcraft.model.level.WordGridLevel
 
 object WordGridLevels {
 
-    fun getLevels(): List<WordGridLevel> {
+    fun getLevels(startId: Int = 8): List<WordGridLevel> {
         return listOf(
             WordGridLevel(
-                id = 6,
+                id = startId + 0,
                 difficulty = 1,
                 status = LevelStatus.LOCKED,
                 grid = listOf(
-                    listOf('C','A','T','S'),
-                    listOf('D','O','G','S'),
-                    listOf('B','I','R','D'),
-                    listOf('F','I','S','H')
+                    listOf('К','О','Т','А','И'),
+                    listOf('П','У','Л','Ь','Г'),
+                    listOf('Л','Е','С','Н','Р'),
+                    listOf('Д','О','М','Ы','А'),
+                    listOf('Н','О','С','К','Т')
                 ),
-                words = listOf("CAT", "DOG", "BIRD", "FISH")
+                words = listOf("КОТ", "ЛЕС", "ДОМ", "НОС", "ИГРА")
             ),
             WordGridLevel(
-                id = 7,
+                id = startId + 1,
                 difficulty = 1,
                 status = LevelStatus.LOCKED,
                 grid = listOf(
-                    listOf('T','R','E','E'),
-                    listOf('L','E','A','F'),
-                    listOf('W','O','O','D'),
-                    listOf('R','O','O','T')
+                    listOf('Р','Е','К','А','М'),
+                    listOf('Т','У','Ч','А','О'),
+                    listOf('Н','О','Р','Т','Р'),
+                    listOf('С','Н','О','П','Е'),
+                    listOf('Г','Р','О','М','Ы')
                 ),
-                words = listOf("TREE", "LEAF", "WOOD", "ROOT")
+                words = listOf("РЕКА", "ТУЧА", "ТРОН", "МОРЕ", "ГРОМ")
             ),
             WordGridLevel(
-                id = 8,
+                id = startId + 2,
                 difficulty = 2,
                 status = LevelStatus.LOCKED,
                 grid = listOf(
-                    listOf('S','U','N','S'),
-                    listOf('M','O','O','N'),
-                    listOf('S','T','A','R'),
-                    listOf('S','K','Y','S')
+                    listOf('З','Е','М','Л','Я'),
+                    listOf('С','Г','О','П','Т'),
+                    listOf('Н','О','Р','Д','А'),
+                    listOf('Л','Р','Е','С','Ы'),
+                    listOf('Т','А','Й','Г','А')
                 ),
-                words = listOf("SUN", "MOON", "STAR", "SKY")
+                words = listOf("ЗЕМЛЯ", "ТАЙГА", "МОРЕ", "ГОРА", "ОРДА")
             ),
             WordGridLevel(
-                id = 9,
+                id = startId + 3,
                 difficulty = 2,
                 status = LevelStatus.LOCKED,
                 grid = listOf(
-                    listOf('F','I','R','E'),
-                    listOf('W','A','T','E'),
-                    listOf('A','I','R','S'),
-                    listOf('E','A','R','T')
+                    listOf('К','О','М','А','Р'),
+                    listOf('П','А','У','К','Ы'),
+                    listOf('Л','И','Х','О','Б'),
+                    listOf('С','Е','А','Н','А'),
+                    listOf('П','Ч','Е','Л','А')
                 ),
-                words = listOf("FIRE", "WATER", "AIR", "EARTH")
+                words = listOf("КОМАР", "ПЧЕЛА", "МУХА", "РЫБА", "ПАУК")
             ),
             WordGridLevel(
-                id = 10,
+                id = startId + 4,
                 difficulty = 3,
                 status = LevelStatus.LOCKED,
                 grid = listOf(
-                    listOf('M','I','N','D'),
-                    listOf('B','R','A','I'),
-                    listOf('T','H','I','N'),
-                    listOf('T','H','O','U')
+                    listOf('С','А','Б','В','Т'),
+                    listOf('Л','О','Т','О','Е'),
+                    listOf('О','З','В','У','К'),
+                    listOf('В','И','Г','Р','С'),
+                    listOf('О','В','А','Л','Т')
                 ),
-                words = listOf("MIND", "BRAIN", "THINK", "THOUGHT")
+                words = listOf("СЛОВО", "ТЕКСТ", "ЗВУК", "ЛОТО", "ОВАЛ")
+            ),
+            WordGridLevel(
+                id = startId + 5,
+                difficulty = 3,
+                status = LevelStatus.LOCKED,
+                grid = listOf(
+                    listOf('К','И','Н','О','Ш'),
+                    listOf('Н','У','Р','О','К'),
+                    listOf('И','Г','Р','А','О'),
+                    listOf('Г','Е','М','А','Л'),
+                    listOf('А','Т','А','К','А')
+                ),
+                words = listOf("КНИГА", "ШКОЛА", "УРОК", "ИГРА", "КИНО")
+            ),
+            WordGridLevel(
+                id = startId + 6,
+                difficulty = 4,
+                status = LevelStatus.LOCKED,
+                grid = listOf(
+                    listOf('Т','Е','С','Т','К'),
+                    listOf('Х','Б','А','Г','О'),
+                    listOf('П','А','Т','Ч','Д'),
+                    listOf('Т','Г','Е','К','Е'),
+                    listOf('Л','И','Н','К','Р')
+                ),
+                words = listOf("КОДЕР", "ТЕСТ", "ПАТЧ", "ЛИНК", "БАГ")
             )
         )
     }

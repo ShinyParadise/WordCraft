@@ -27,7 +27,8 @@ fun WordCraftNavHost() {
             MapScreen(
                 onLevelClick = { levelId ->
                     navController.navigate("game/$levelId")
-                }
+                },
+                onBack = { navController.popBackStack() }
             )
         }
 
@@ -36,6 +37,7 @@ fun WordCraftNavHost() {
 
             GameScreen(
                 levelId = levelId,
+                onBack = { navController.popBackStack() },
                 onFinish = { result ->
                     navController.navigate(
                         "result/${result.levelId}/${result.result.name}"
@@ -53,6 +55,13 @@ fun WordCraftNavHost() {
                 isWin = result == "WIN",
                 onBackToMap = {
                     navController.popBackStack("map", false)
+                },
+                onContinue = {
+                    val nextLevelId = levelId + 1
+                    navController.navigate("game/$nextLevelId") {
+                        popUpTo("map") { inclusive = false }
+                        launchSingleTop = true
+                    }
                 }
             )
         }

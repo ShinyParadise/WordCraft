@@ -16,6 +16,14 @@ class ProgressRepository(
         dataStore.saveLevelStatus(levelId, LevelStatus.UNLOCKED.name)
     }
 
+    suspend fun tryUnlockLevel(levelId: Int) {
+        val stored = dataStore.getLevelStatus(levelId)
+        val shouldUnlock = stored == null || stored == LevelStatus.LOCKED.name
+        if (shouldUnlock) {
+            saveLevelUnlocked(levelId)
+        }
+    }
+
     suspend fun saveHintsUsed(levelId: Int, count: Int) {
         dataStore.saveHintsUsed(levelId, count)
     }

@@ -5,7 +5,7 @@ sealed interface GameAction {
     data object UseRevealLetter : GameAction
     data object UseExtraAttempt : GameAction
 
-    data class SelectWord(val word: String) : GameAction
+    data class SubmitGridSelection(val path: List<dev.shinyparadise.wordcraft.model.state.GridPos>) : GameAction
 
     data class SubmitBuiltWord(val word: String) : GameAction
 }

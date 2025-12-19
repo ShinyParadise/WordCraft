@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.first
 
 private val Context.dataStore by preferencesDataStore(name = "wordcraft_prefs")
 
@@ -24,6 +25,12 @@ class GameDataStore(
         return context.dataStore.data.map { prefs ->
             prefs[Keys.levelStatus(levelId)]
         }
+    }
+
+    suspend fun getLevelStatus(levelId: Int): String? {
+        return context.dataStore.data
+            .map { prefs -> prefs[Keys.levelStatus(levelId)] }
+            .first()
     }
 
     suspend fun saveLevelStatus(levelId: Int, status: String) {

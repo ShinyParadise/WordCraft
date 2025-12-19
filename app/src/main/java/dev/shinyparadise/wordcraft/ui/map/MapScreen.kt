@@ -17,14 +17,15 @@ import dev.shinyparadise.wordcraft.viewmodel.MapViewModel
 
 @Composable
 fun MapScreen(
-    onLevelClick: (Int) -> Unit
+    onLevelClick: (Int) -> Unit,
+    onBack: () -> Unit
 ) {
     val viewModel: MapViewModel = viewModel()
     val levels by viewModel.levels.collectAsState()
 
     GameScaffold(
         title = "Карта уровней",
-        onBack = {}
+        onBack = onBack
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),

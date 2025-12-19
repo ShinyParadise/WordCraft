@@ -23,7 +23,7 @@ fun GameScaffold(
                     IconButton(onClick = onBack) {
                         Icon(
                             painter = painterResource(R.drawable.baseline_arrow_back_24),
-                            contentDescription = null
+                            contentDescription = "Назад"
                         )
                     }
                 }
@@ -33,6 +33,7 @@ fun GameScaffold(
         Box(
             modifier = Modifier
                 .padding(padding)
+                .fillMaxSize()
                 .padding(16.dp)
         ) {
             content()

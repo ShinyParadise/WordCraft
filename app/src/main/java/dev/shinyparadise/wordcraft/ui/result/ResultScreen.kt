@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.dp
 fun ResultScreen(
     levelId: Int,
     isWin: Boolean,
-    onBackToMap: () -> Unit
+    onBackToMap: () -> Unit,
+    onContinue: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -29,6 +30,14 @@ fun ResultScreen(
 
         Button(onClick = onBackToMap) {
             Text("На карту уровней")
+        }
+
+        if (isWin && levelId < 20) {
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Button(onClick = onContinue) {
+                Text("Продолжить")
+            }
         }
     }
 }

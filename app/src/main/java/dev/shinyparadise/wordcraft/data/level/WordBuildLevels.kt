@@ -5,42 +5,49 @@ import dev.shinyparadise.wordcraft.model.level.WordBuildLevel
 
 object WordBuildLevels {
 
-    fun getLevels(): List<WordBuildLevel> {
+    fun getLevels(startId: Int = 15): List<WordBuildLevel> {
         return listOf(
             WordBuildLevel(
-                id = 11,
+                id = startId + 0,
                 difficulty = 1,
                 status = LevelStatus.LOCKED,
-                letters = listOf('C','A','T'),
-                words = listOf("CAT", "AT")
+                letters = listOf('К','О','Т'),
+                words = listOf("КОТ", "ТОК")
             ),
             WordBuildLevel(
-                id = 12,
+                id = startId + 1,
                 difficulty = 1,
                 status = LevelStatus.LOCKED,
-                letters = listOf('D','O','G'),
-                words = listOf("DOG", "GO")
+                letters = listOf('Д','О','М'),
+                words = listOf("ДОМ", "МОД")
             ),
             WordBuildLevel(
-                id = 13,
+                id = startId + 2,
                 difficulty = 2,
                 status = LevelStatus.LOCKED,
-                letters = listOf('F','I','R','E'),
-                words = listOf("FIRE", "IF", "RE")
+                letters = listOf('К','А','Р','Т','А'),
+                words = listOf("КАРТА", "ТАРА", "АРКА")
             ),
             WordBuildLevel(
-                id = 14,
+                id = startId + 3,
                 difficulty = 2,
                 status = LevelStatus.LOCKED,
-                letters = listOf('W','A','T','E','R'),
-                words = listOf("WATER", "TEAR", "RATE")
+                letters = listOf('С','Т','О','Л'),
+                words = listOf("СТОЛ", "ЛОТ")
             ),
             WordBuildLevel(
-                id = 15,
+                id = startId + 4,
                 difficulty = 3,
                 status = LevelStatus.LOCKED,
-                letters = listOf('P','L','A','N','T'),
-                words = listOf("PLANT", "ANT", "LAP")
+                letters = listOf('П','А','Р','Т','А'),
+                words = listOf("ПАРТА", "ТАРА", "ПАР")
+            ),
+            WordBuildLevel(
+                id = startId + 5,
+                difficulty = 4,
+                status = LevelStatus.LOCKED,
+                letters = listOf('К','О','М','А','Р'),
+                words = listOf("КОМАР", "КОРА", "РОМ")
             )
         )
     }

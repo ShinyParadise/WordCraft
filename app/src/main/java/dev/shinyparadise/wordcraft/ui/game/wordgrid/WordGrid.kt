@@ -10,7 +10,11 @@ fun WordGrid(grid: List<List<Char>>) {
         grid.forEach { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 row.forEach { letter ->
-                    WordGridCell(letter)
+                    WordGridCell(
+                        letter = letter,
+                        isSelected = false,
+                        isFound = false
+                    )
                 }
             }
         }

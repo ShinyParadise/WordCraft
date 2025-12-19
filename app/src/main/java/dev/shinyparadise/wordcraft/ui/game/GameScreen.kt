@@ -1,7 +1,10 @@
 package dev.shinyparadise.wordcraft.ui.game
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -27,6 +30,7 @@ import dev.shinyparadise.wordcraft.viewmodel.GameScreenViewModel
 @Composable
 fun GameScreen(
     levelId: Int,
+    onBack: () -> Unit,
     onFinish: (LevelResultArg) -> Unit
 ) {
     val level = remember(levelId) {
@@ -54,7 +58,7 @@ fun GameScreen(
 
     GameScaffold(
         title = "Уровень $levelId",
-        onBack = {}
+        onBack = onBack
     ) {
         GameContent(state, viewModel)
     }
@@ -71,11 +75,25 @@ fun GameContent(
     ) {
         when (state.level.type) {
             LevelType.WORD_GUESS -> {
-                WordleGame(
-                    level = state.level as WordGuessLevel,
-                    state = state.levelState as WordGuessState,
-                    onAction = viewModel::onAction
-                )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    verticalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(12.dp)
+                ) {
+                    BoostersPanel(
+                        boosters = (state.levelState as WordGuessState).boosters,
+                        onRevealLetter = { viewModel.onAction(GameAction.UseRevealLetter) },
+                        onExtraAttempt = { viewModel.onAction(GameAction.UseExtraAttempt) },
+                        modifier = Modifier.fillMaxWidth()
+                    )
+
+                    WordleGame(
+                        level = state.level as WordGuessLevel,
+                        state = state.levelState as WordGuessState,
+                        onAction = viewModel::onAction
+                    )
+                }
             }
             LevelType.WORD_GRID -> {
                 WordGridGame(

@@ -5,7 +5,8 @@ data class WordGridState(
     override val isCompleted: Boolean,
     override val usedHints: Int,
     override val boosters: Map<String, Int> = emptyMap(),
-    val foundWords: Set<String>
+    val foundWords: Set<String>,
+    val foundCells: Set<GridPos>
 ) : LevelState {
 
     companion object {
@@ -14,7 +15,8 @@ data class WordGridState(
                 levelId = levelId,
                 isCompleted = false,
                 usedHints = 0,
-                foundWords = emptySet()
+                foundWords = emptySet(),
+                foundCells = emptySet()
             )
         }
     }

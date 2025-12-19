@@ -43,12 +43,12 @@ class MapViewModel(
             ) { items ->
                 items.toList()
             }.collect {
-                _levels.value = unlockSequentially(it)
+                _levels.value = unlockSequentiallyAndPersist(it)
             }
         }
     }
 
-    private fun unlockSequentially(
+    private suspend fun unlockSequentiallyAndPersist(
         levels: List<MapLevelItem>
     ): List<MapLevelItem> {
 
@@ -58,6 +58,7 @@ class MapViewModel(
             if (sorted[i].status == LevelStatus.COMPLETED &&
                 sorted[i + 1].status == LevelStatus.LOCKED
             ) {
+                repository.tryUnlockLevel(sorted[i + 1].id)
                 sorted[i + 1] = sorted[i + 1].copy(
                     status = LevelStatus.UNLOCKED
                 )

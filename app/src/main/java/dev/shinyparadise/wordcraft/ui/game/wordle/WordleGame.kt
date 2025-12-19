@@ -1,9 +1,12 @@
 package dev.shinyparadise.wordcraft.ui.game.wordle
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import dev.shinyparadise.wordcraft.model.level.WordGuessLevel
 import dev.shinyparadise.wordcraft.model.state.WordGuessState
@@ -17,7 +20,7 @@ fun WordleGame(
 ) {
     var input by remember { mutableStateOf("") }
 
-    val rows = remember(state) {
+    val rows = remember(level, state) {
         WordleUiMapper.map(level, state)
     }
 
@@ -40,14 +43,13 @@ fun WordleGame(
                     input = it.uppercase()
                 }
             },
-            label = { Text("Введите слово") }
+            label = { Text("Введите слово") },
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Characters,
+                imeAction = ImeAction.Done
+            )
         )
-
-        Button(
-            onClick = { onAction(GameAction.UseRevealLetter) }
-        ) {
-            Text("Подсказка буквы")
-        }
 
         Button(
             enabled = input.length == level.targetWord.length,
