@@ -23,7 +23,11 @@ class ProgressRepository(
     fun observeLevelStatus(levelId: Int): Flow<LevelStatus> {
         return dataStore.levelStatusFlow(levelId)
             .map { stored ->
-                stored?.let { LevelStatus.valueOf(it) } ?: LevelStatus.LOCKED
+                when {
+                    stored != null -> LevelStatus.valueOf(stored)
+                    levelId == 1 -> LevelStatus.UNLOCKED
+                    else -> LevelStatus.LOCKED
+                }
             }
     }
 }

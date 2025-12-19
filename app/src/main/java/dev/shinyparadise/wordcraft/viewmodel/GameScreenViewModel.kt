@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import dev.shinyparadise.wordcraft.data.GameDataStore
 import dev.shinyparadise.wordcraft.data.ProgressRepository
+import dev.shinyparadise.wordcraft.model.booster.ExtraAttemptBooster
+import dev.shinyparadise.wordcraft.model.booster.RevealLetterBooster
 import dev.shinyparadise.wordcraft.model.level.Level
 import dev.shinyparadise.wordcraft.model.level.LevelResult
 import dev.shinyparadise.wordcraft.model.level.WordBuildLevel
@@ -17,8 +19,9 @@ import dev.shinyparadise.wordcraft.model.state.LevelState
 import dev.shinyparadise.wordcraft.model.state.WordBuildState
 import dev.shinyparadise.wordcraft.model.state.WordGridState
 import dev.shinyparadise.wordcraft.model.state.WordGuessState
-import dev.shinyparadise.wordcraft.ui.game.GameScreenState
+import dev.shinyparadise.wordcraft.ui.game.GameState
 import dev.shinyparadise.wordcraft.ui.game.GameAction
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class GameScreenViewModel(
@@ -27,7 +30,7 @@ class GameScreenViewModel(
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
-        GameScreenState(
+        GameState(
             level = level,
             levelState = createLevelState(level)
         )
@@ -36,40 +39,52 @@ class GameScreenViewModel(
     private fun createLevelState(level: Level): LevelState {
         return when (level) {
             is WordGridLevel -> WordGridState.initial(level.id)
-            is WordGuessLevel -> WordGuessState.initial(level.id, level.maxAttempts)
+            is WordGuessLevel -> WordGuessState.initial(level.id, level.maxAttempts).copy(
+                boosters = initialBoosters()
+            )
             is WordBuildLevel -> WordBuildState.initial(level.id)
         }
     }
 
-    val state: StateFlow<GameScreenState> = _state
+    val state: StateFlow<GameState> = _state
 
     fun onAction(action: GameAction) {
         when (action) {
             is GameAction.SubmitWord -> submitWord(action.word)
             GameAction.UseRevealLetter -> revealLetter()
+            GameAction.UseExtraAttempt -> TODO()
             is GameAction.SelectWord -> selectWord(action.word)
             is GameAction.SubmitBuiltWord -> submitBuiltWord(action.word)
         }
     }
 
     private fun revealLetter() {
-        val current = _state.value.levelState as WordGuessState
+        val state = _state.value.levelState
 
-        if (current.isCompleted) return
+        if (state !is WordGuessState) return
 
-        val unrevealed = (level as WordGuessLevel).targetWord.indices
-            .filter { it !in current.revealedIndexes }
+        val count = state.boosters[RevealLetterBooster.id] ?: return
+        if (count <= 0) return
 
-        if (unrevealed.isEmpty()) return
+        val targetWord = (level as WordGuessLevel).targetWord
 
-        val indexToReveal = unrevealed.random()
+        val hiddenIndices = targetWord.indices
+            .filterNot { state.revealedIndexes.contains(it) }
 
-        val newState = current.copy(
-            revealedIndexes = current.revealedIndexes + indexToReveal,
-            usedHints = current.usedHints + 1
-        )
+        if (hiddenIndices.isEmpty()) return
 
-        _state.value = _state.value.copy(levelState = newState)
+        val index = hiddenIndices.random()
+
+        _state.update {
+            it.copy(
+                levelState = state.copy(
+                    revealedIndexes = state.revealedIndexes + index,
+                    boosters = state.boosters.toMutableMap().apply {
+                        put(RevealLetterBooster.id, count - 1)
+                    }
+                )
+            )
+        }
     }
 
     private fun submitWord(word: String) {
@@ -155,9 +170,15 @@ class GameScreenViewModel(
         )
     }
 
+    private fun initialBoosters(): Map<String, Int> {
+        return mapOf(
+            RevealLetterBooster.id to RevealLetterBooster.maxCount,
+            ExtraAttemptBooster.id to ExtraAttemptBooster.maxCount
+        )
+    }
 
     class Factory(
-        private val level: WordGuessLevel,
+        private val level: Level,
         private val context: Context,
     ) : ViewModelProvider.Factory {
 

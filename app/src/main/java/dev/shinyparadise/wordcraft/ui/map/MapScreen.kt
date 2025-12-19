@@ -12,6 +12,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import dev.shinyparadise.wordcraft.ui.game.GameScaffold
 import dev.shinyparadise.wordcraft.viewmodel.MapViewModel
 
 @Composable
@@ -21,19 +22,21 @@ fun MapScreen(
     val viewModel: MapViewModel = viewModel()
     val levels by viewModel.levels.collectAsState()
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    GameScaffold(
+        title = "Карта уровней",
+        onBack = {}
     ) {
-        items(levels) { level ->
-            LevelCard(
-                level = level,
-                onClick = { onLevelClick(level.id) }
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(levels) { level ->
+                LevelCard(
+                    level = level,
+                    onClick = { onLevelClick(level.id) }
+                )
+            }
         }
     }
 }

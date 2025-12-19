@@ -6,6 +6,7 @@ data class WordGuessState(
     override val usedHints: Int,
     override val maxAttempts: Int,
     override val currentAttempt: Int,
+    override val boosters: Map<String, Int> = emptyMap(),
     val guesses: List<String>,
     val revealedIndexes: Set<Int> = emptySet()
 ) : LevelState, AttemptBasedState {
