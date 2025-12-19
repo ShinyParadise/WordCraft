@@ -1,6 +1,8 @@
 package dev.shinyparadise.wordcraft.data
 
 import dev.shinyparadise.wordcraft.model.level.LevelStatus
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class ProgressRepository(
     private val dataStore: GameDataStore
@@ -16,5 +18,12 @@ class ProgressRepository(
 
     suspend fun saveHintsUsed(levelId: Int, count: Int) {
         dataStore.saveHintsUsed(levelId, count)
+    }
+
+    fun observeLevelStatus(levelId: Int): Flow<LevelStatus> {
+        return dataStore.levelStatusFlow(levelId)
+            .map { stored ->
+                stored?.let { LevelStatus.valueOf(it) } ?: LevelStatus.LOCKED
+            }
     }
 }

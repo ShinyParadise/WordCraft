@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.composable
 import dev.shinyparadise.wordcraft.ui.game.GameScreen
-import dev.shinyparadise.wordcraft.ui.map.LevelMapScreen
+import dev.shinyparadise.wordcraft.ui.map.MapScreen
 import dev.shinyparadise.wordcraft.ui.menu.MainMenuScreen
 import dev.shinyparadise.wordcraft.ui.result.ResultScreen
 
@@ -24,8 +24,8 @@ fun WordCraftNavHost() {
         }
 
         composable("map") {
-            LevelMapScreen(
-                onLevelSelected = { levelId ->
+            MapScreen(
+                onLevelClick = { levelId ->
                     navController.navigate("game/$levelId")
                 }
             )

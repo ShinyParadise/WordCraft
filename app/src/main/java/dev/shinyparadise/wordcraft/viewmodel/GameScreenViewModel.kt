@@ -6,29 +6,40 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import dev.shinyparadise.wordcraft.data.GameDataStore
 import dev.shinyparadise.wordcraft.data.ProgressRepository
+import dev.shinyparadise.wordcraft.model.level.Level
 import dev.shinyparadise.wordcraft.model.level.LevelResult
+import dev.shinyparadise.wordcraft.model.level.WordBuildLevel
+import dev.shinyparadise.wordcraft.model.level.WordGridLevel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import dev.shinyparadise.wordcraft.model.level.WordGuessLevel
+import dev.shinyparadise.wordcraft.model.state.LevelState
+import dev.shinyparadise.wordcraft.model.state.WordBuildState
+import dev.shinyparadise.wordcraft.model.state.WordGridState
 import dev.shinyparadise.wordcraft.model.state.WordGuessState
 import dev.shinyparadise.wordcraft.ui.game.GameScreenState
 import dev.shinyparadise.wordcraft.ui.game.GameAction
 import kotlinx.coroutines.launch
 
 class GameScreenViewModel(
-    private val level: WordGuessLevel,
+    private val level: Level,
     private val progressRepository: ProgressRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(
         GameScreenState(
             level = level,
-            levelState = WordGuessState.initial(
-                levelId = level.id,
-                maxAttempts = level.maxAttempts
-            )
+            levelState = createLevelState(level)
         )
     )
+
+    private fun createLevelState(level: Level): LevelState {
+        return when (level) {
+            is WordGridLevel -> WordGridState.initial(level.id)
+            is WordGuessLevel -> WordGuessState.initial(level.id, level.maxAttempts)
+            is WordBuildLevel -> WordBuildState.initial(level.id)
+        }
+    }
 
     val state: StateFlow<GameScreenState> = _state
 
@@ -36,6 +47,8 @@ class GameScreenViewModel(
         when (action) {
             is GameAction.SubmitWord -> submitWord(action.word)
             GameAction.UseRevealLetter -> revealLetter()
+            is GameAction.SelectWord -> selectWord(action.word)
+            is GameAction.SubmitBuiltWord -> submitBuiltWord(action.word)
         }
     }
 
@@ -44,7 +57,7 @@ class GameScreenViewModel(
 
         if (current.isCompleted) return
 
-        val unrevealed = level.targetWord.indices
+        val unrevealed = (level as WordGuessLevel).targetWord.indices
             .filter { it !in current.revealedIndexes }
 
         if (unrevealed.isEmpty()) return
@@ -61,6 +74,7 @@ class GameScreenViewModel(
 
     private fun submitWord(word: String) {
         val current = _state.value.levelState as WordGuessState
+        val level = level as WordGuessLevel
 
         if (current.isCompleted || _state.value.isFinished) return
         if (word.length != level.targetWord.length) return
@@ -94,6 +108,53 @@ class GameScreenViewModel(
             }
         )
     }
+
+    private fun selectWord(word: String) {
+        val current = _state.value.levelState as WordGridState
+        val level = _state.value.level as WordGridLevel
+
+        if (current.isCompleted) return
+        if (!level.words.contains(word)) return
+        if (current.foundWords.contains(word)) return
+
+        val newFound = current.foundWords + word
+        val completed = newFound.size == level.words.size
+
+        val newState = current.copy(
+            foundWords = newFound,
+            isCompleted = completed
+        )
+
+        _state.value = _state.value.copy(
+            levelState = newState,
+            isFinished = completed,
+            result = if (completed) LevelResult.WIN else null
+        )
+    }
+
+    private fun submitBuiltWord(word: String) {
+        val level = _state.value.level as WordBuildLevel
+        val current = _state.value.levelState as WordBuildState
+
+        if (current.isCompleted) return
+        if (!level.words.contains(word)) return
+        if (current.foundWords.contains(word)) return
+
+        val newFound = current.foundWords + word
+        val completed = newFound.size == level.words.size
+
+        val newState = current.copy(
+            foundWords = newFound,
+            isCompleted = completed
+        )
+
+        _state.value = _state.value.copy(
+            levelState = newState,
+            isFinished = completed,
+            result = if (completed) LevelResult.WIN else null
+        )
+    }
+
 
     class Factory(
         private val level: WordGuessLevel,

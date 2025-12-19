@@ -17,3 +17,24 @@ data class WordGuessLevel(
     override val type: LevelType = LevelType.WORD_GUESS
 }
 
+data class WordGridLevel(
+    override val id: Int,
+    override val difficulty: Int,
+    override val status: LevelStatus,
+    val grid: List<List<Char>>,
+    val words: List<String>
+) : Level {
+
+    override val type: LevelType = LevelType.WORD_GRID
+}
+
+data class WordBuildLevel(
+    override val id: Int,
+    override val difficulty: Int,
+    override val status: LevelStatus,
+    val letters: List<Char>,
+    val words: List<String>
+) : Level {
+
+    override val type: LevelType = LevelType.WORD_BUILD
+}

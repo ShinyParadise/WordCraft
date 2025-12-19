@@ -5,8 +5,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import dev.shinyparadise.wordcraft.model.level.LevelStatus
 import dev.shinyparadise.wordcraft.model.level.LevelType
+import dev.shinyparadise.wordcraft.model.level.WordBuildLevel
+import dev.shinyparadise.wordcraft.model.level.WordGridLevel
 import dev.shinyparadise.wordcraft.model.level.WordGuessLevel
+import dev.shinyparadise.wordcraft.model.state.WordBuildState
+import dev.shinyparadise.wordcraft.model.state.WordGridState
 import dev.shinyparadise.wordcraft.model.state.WordGuessState
+import dev.shinyparadise.wordcraft.ui.game.wordbuild.WordBuildGame
+import dev.shinyparadise.wordcraft.ui.game.wordgrid.WordGridGame
 import dev.shinyparadise.wordcraft.ui.game.wordle.WordleGame
 import dev.shinyparadise.wordcraft.viewmodel.GameScreenViewModel
 
@@ -47,6 +53,20 @@ fun GameScreen(
             WordleGame(
                 level = state.level as WordGuessLevel,
                 state = state.levelState as WordGuessState,
+                onAction = viewModel::onAction
+            )
+        }
+        LevelType.WORD_GRID -> {
+            WordGridGame(
+                level = state.level as WordGridLevel,
+                state = state.levelState as WordGridState,
+                onAction = viewModel::onAction
+            )
+        }
+        LevelType.WORD_BUILD -> {
+            WordBuildGame(
+                level = state.level as WordBuildLevel,
+                state = state.levelState as WordBuildState,
                 onAction = viewModel::onAction
             )
         }
